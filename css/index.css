@@ -1,0 +1,83 @@
+body {
+    font-size:14px;
+}
+#my {
+    width:800px;
+    height:300px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin-top:-150px;
+    margin-left:-400px;   
+}
+/*主容器样式*/
+.container {
+    display:flex;
+    /* justify-content: space-around; */
+}
+/*内容容器样式*/
+.main-style {
+    width: 500px;
+    height: 300px;
+    margin-left:20px;
+}
+.main-style h4 {
+    color: #212632;
+    font-weight: normal;
+}
+/*规格样式*/
+.variant-style {
+    height:100px;
+    padding:10px 0;
+    border-bottom: 1px dotted #ddd;
+    border-top: 1px dotted #ddd;
+    box-sizing: border-box;
+}
+.variant-style > div {
+    height:40px;
+    line-height: 40px;
+    color:gray;
+    display:flex;
+}
+.variant-style button  {
+    margin-right: 35px;
+    color:#212632;
+    background: #f5f5f5;
+    padding: 5px 10px;
+    width:50px;
+    border:0;
+
+}
+.variant-style button:first-child {
+    margin-left: 50px;
+}
+.variant-style button.selected {
+    color:#ffffff;
+    background: #212632;
+}
+.variant-style button.forbid {
+    color:#ccc;
+    background: #f5f5f5;
+}
+.variant-style button:not(.forbid):hover{
+    cursor: pointer;
+}
+
+/*价格库存样式*/
+.cost-style {
+    height:130px;
+    padding-top:35px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color:gray;
+}
+.cost-style label {
+    display: inline-block;
+    width:80px;
+}
+.cost-style b {
+    font-size:20px;
+    color:#212632;
+}

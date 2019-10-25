@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>react</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/react.development.js"></script>
+    <script src="js/react-dom.development.js"></script>
+    <script type="text/javascript" src="js/babel.min.js"></script>
+    <script src="https://cdn.bootcss.com/fetch/2.0.3/fetch.min.js"></script>
+  </head>
+  <body>
+    <div id="my"></div>
+
+    <script type="text/babel"> 
+       class Cost extends React.Component{
+         render() {
+           let isShow = this.props.in_stock_num ? 'block' : 'none';
+           return (
+             <div className="cost-style" style={{display: isShow}}>
+                <div>
+                  <label>价格</label>
+                  <span>￥<b>{this.props.selling_price}</b></span>
+                </div>
+                <div>
+                  <label>sku_code</label>
+                  <span>{this.props.sku_code}</span>
+                </div>
+                <div>
+                  <label>剩余库存</label>
+                  <span>{this.props.in_stock_num}</span>
+                </div>
+             </div>
+           )
+         }
+       }
+        class Variant extends React.Component{
+          constructor() {
+            super()
+            this.sizeFather = null;
+            this.state = {
+              forbidSize: '',
+              selectedColor: '',
+              selectedSize:''
+            }
+          }
+          publicSelect(e) {
+            let children = e.childNodes;
+            children.forEach((item)=>{
+              if(item.classList.contains('selected')) {
+                item.classList.remove('selected')
+              }
+            })
+          }
+          selectColor(e,item) { // 颜色选中
+            this.publicSelect(this.sizeFather);
+            this.setState({
+              forbidSize: '',
+              selectedColor: item.option_id,
+              selectedSize:''
+            },function(){
+              this.props.handleSelect(this.state.selectedColor, this.state.selectedSize)
+            })
+            this.props.skus.map((params)=>{
+              if(params.in_stock_num === 0){
+                if(item.option_id == params.options[0]){
+                  this.setState({
+                    forbidSize: params.options[1]
+                  })
+                }
+              }
+            })
+          }
+          selectSize(e,item){ // 容量选中
+            this.setState({
+              selectedSize: item.option_id
+            },function(){
+              this.props.handleSelect(this.state.selectedColor, this.state.selectedSize)
+            })
+          }
+          render() {
+            let color,size;
+            if(this.props.variants) {
+              [color,size] = this.props.variants;
+            }
+            return (
+              <div className="variant-style">
+                <div>
+                  <label>{color ? color.variant_name : ''}</label>
+                  <div>
+                    {
+                        color ? color.options.map((item,index)=>{
+                          return <button disabled={item.option_id==3} className={item.option_id == 3 ? 'forbid': (this.state.selectedColor == item.option_id ? 'selected' : '')} key={item.option_id} onClick={(e)=>this.selectColor(e,item)}>{item.option_name}</button>
+                        }) : ''
+                    }
+                  </div>
+                </div>
+                <div>
+                  <label>{size ? size.variant_name : ''}</label>
+                  <div ref={node => (this.sizeFather = node)}>
+                    {
+                        size ? size.options.map((item,index)=>{
+                          return <button key={item.option_id} onClick={(e)=>this.selectSize(e,item)} disabled={this.state.forbidSize == item.option_id} className={this.state.forbidSize == item.option_id ? 'forbid': (this.state.selectedSize == item.option_id ? 'selected' : '')} >{item.option_name}</button>
+                        }) : ''
+                    }
+                  </div>
+                </div>
+              </div>
+            )
+          }
+        }
+        class Main extends React.Component {
+          constructor(){
+            super()
+            this.state = {
+              showCost: {}
+            }
+          }
+          selectedVariant(color,size) {
+            this.setState({
+              showCost: {}
+            })
+            this.props.skus.map((item)=>{
+              if(item.in_stock_num !== 0){
+                if(item.options.join('') == (color + '' + size)){
+                  this.setState({
+                    showCost: item
+                  })
+                }
+              }
+            })
+          }
+          render() {
+            return(
+              <div className="main-style">
+                <div>
+                    <h4>{this.props.product_info? (this.props.product_info.product_id + this.props.product_info.product_name): ''}</h4>
+                </div>
+                <Variant {...this.props} handleSelect={this.selectedVariant.bind(this)}></Variant>
+                <Cost {...this.state.showCost}></Cost>
+              </div>
+            )
+          }
+        }
+        class UPAN extends React.Component {
+          constructor() {
+            super()
+            this.state = {
+              data: {}
+            }
+          }
+          componentDidMount(){
+              const self = this
+              let url = "http://dev.xidianbao.xyz/api/others/interview"
+              let option = {
+                  methods:"get"
+              }
+              fetch(url,option).then((res)=>{
+                  return res.json()
+              }).then((res)=>{
+                  self.setState({
+                      data:res.data
+                  })
+              })
+          }
+          render(){
+              return (
+              <div className="container">
+                  <div className="pic-contanier">
+                    <img src="img/red.jpg" width="300" height="300" />
+                  </div>
+                  <Main {...this.state.data}/>
+              </div>
+              )
+          }
+        };
+
+        ReactDOM.render(
+          <UPAN></UPAN>,
+          document.getElementById("my")
+        );
+
+    </script>
+  </body>
+</html>

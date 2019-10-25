@@ -1,0 +1,58 @@
+{
+    "code": 200,
+    "msg": "",
+    "data": {
+        "question": "有两组相关联的商品数据: \n                        1、产品变量及变量规格\n                        2、商品sku信息,包括产品ID,规格,库存以及sku,其中sku的排列是根据option_id从小到大排列\n                            比如: 1BA95B4101_1_4 的规格是 颜色的 option_id: 1(黑色)和 容量的 option_id: 4(16G) 共同组成\n                    现在需要一个界面,类似 http://image.yunmushang.com/interview.png , 需要做到:\n                        1、sku没有涉及的规格灰色不可选(例如下面的红色规格在sku没有商品,应为灰色)\n                        2、每个变量只能选择一个规格\n                        3、选择某一个变量的规格,如果和其余变量的某些规格组合起来库存(in_stock_num)为零,那些规格变成灰色不可选状态,\n                            (比如,选择白色,16G有库存,32G没有库存,32G应该显示为灰色)\n                        4、选择每个变量的规格,加起来得出的商品,如果库存in_stock_num不为零请将其库存和sku显示在一个div里表示选中",
+        "product_info": {
+            "product_id": "1BA95B4101",
+            "product_name": "金盾U盘"
+        },
+        "variants": [{
+            "variant_name": "颜色",
+            "options": [{
+                "option_id": 1,
+                "option_name": "黑色"
+            }, {
+                "option_id": 2,
+                "option_name": "白色"
+            }, {
+                "option_id": 3,
+                "option_name": "红色"
+            }]
+        }, {
+            "variant_name": "容量",
+            "options": [{
+                "option_id": 4,
+                "option_name": "16G"
+            }, {
+                "option_id": 5,
+                "option_name": "32G"
+            }]
+        }],
+        "skus": [{
+            "product_id": "1BA95B4101",
+            "sku_code": "1BA95B4101_1_4",
+            "options": [1, 4],
+            "selling_price": 100,
+            "in_stock_num": 100
+        }, {
+            "product_id": "1BA95B4101",
+            "sku_code": "1BA95B4101_1_5",
+            "options": [1, 5],
+            "selling_price": 200,
+            "in_stock_num": 99
+        }, {
+            "product_id": "1BA95B4101",
+            "sku_code": "1BA95B4101_2_4",
+            "options": [2, 4],
+            "selling_price": 300,
+            "in_stock_num": 98
+        }, {
+            "product_id": "1BA95B4101",
+            "sku_code": "1BA95B4101_2_5",
+            "options": [2, 5],
+            "selling_price": 400,
+            "in_stock_num": 0
+        }]
+    }
+}
